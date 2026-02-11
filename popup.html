@@ -107,6 +107,30 @@
             border: 1px solid rgba(255, 255, 255, 0.10);
             border-radius: 8px;
             background: #181818;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+        }
+
+        .channel-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .channel-list::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 4px;
+        }
+
+        .channel-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+            transition: background-color 0.2s;
+        }
+
+        .channel-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.35);
+            background-clip: content-box;
         }
         
         .channel-item {
