@@ -179,7 +179,7 @@
     }
 
     function getVideoContainersFromRoot(root) {
-        const selector = 'ytd-rich-item-renderer, ytd-video-renderer, ytd-grid-video-renderer, ytd-compact-video-renderer, ytd-playlist-video-renderer, ytd-reel-item-renderer';
+        const selector = 'ytd-rich-item-renderer, ytd-video-renderer, ytd-grid-video-renderer, ytd-compact-video-renderer, ytd-playlist-video-renderer, ytd-reel-item-renderer, yt-lockup-view-model';
         if (root instanceof Element && root.matches(selector)) return [root];
         if (root instanceof Element) return Array.from(root.querySelectorAll(selector));
         return Array.from(document.querySelectorAll(selector));
@@ -265,6 +265,29 @@
 
     function extractChannelInfoFromContainer(container) {
         if (!container) return { channelName: null, channelId: null };
+
+        if (container.matches('yt-lockup-view-model')) {
+            const metaLink = container.querySelector('.yt-lockup-metadata-view-model__metadata a[href*="/@"], .yt-lockup-metadata-view-model__metadata a[href*="/channel/"]');
+            if (metaLink) {
+                const channelName = (metaLink.textContent || '').trim() || metaLink.getAttribute('title') || metaLink.getAttribute('aria-label');
+                const href = metaLink.href || '';
+                let channelId = null;
+
+                const channelMatch = href.match(/\/channel\/([^\/\?]+)/);
+                if (channelMatch && channelMatch[1]) {
+                    channelId = channelMatch[1];
+                } else {
+                    const handleMatch = href.match(/\/@([^\/\?]+)/);
+                    if (handleMatch && handleMatch[1]) {
+                        channelId = handleMatch[1];
+                    }
+                }
+
+                if (channelName || channelId) {
+                    return { channelName: channelName || null, channelId: channelId || null };
+                }
+            }
+        }
 
         const linkSelectors = [
             'ytd-channel-name a',
