@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Blocker",
+  "version": "1.0",
+  "description": "Block channels from showing up on your feed, even when seaching.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "windows",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "blocker.js"
+  },
+  "action": {
+    "default_title": "YouTube Blocker",
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["blocker.html"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
