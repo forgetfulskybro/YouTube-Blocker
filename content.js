@@ -524,6 +524,13 @@
 
                 lb.appendChild(paperItem);
                 dropdown.removeAttribute('data-ytb-search-injecting');
+
+                const menuPopup = dropdown.querySelector('ytd-menu-popup-renderer');
+                if (menuPopup) {
+                    menuPopup.style.maxWidth = '180px';
+                    menuPopup.style.maxHeight = '220px';
+                }
+
                 void paperItem.offsetWidth;
                 console.log('Block Channel button added successfully (search)');
             } catch (e) {
