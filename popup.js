@@ -79,7 +79,7 @@ async function loadBlockedChannels() {
             allBlockedChannels = response.channels || [];
             renderFilteredChannels();
             updateStats(allBlockedChannels);
-            updateHiddenCount();
+            updateTotalVideosBlocked();
         } else {
             showError('Failed to load blocked channels');
         }
@@ -104,20 +104,14 @@ function renderFilteredChannels() {
     displayChannels(filtered);
 }
 
-async function updateHiddenCount() {
+async function updateTotalVideosBlocked() {
     const hiddenCount = document.getElementById('hiddenCount');
     if (!hiddenCount) return;
 
     try {
-        const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
-        if (!tab || !tab.id || !tab.url || !tab.url.includes('youtube.com')) {
-            hiddenCount.textContent = '0';
-            return;
-        }
-
-        const response = await chrome.tabs.sendMessage(tab.id, { action: 'getHiddenCount' });
-        if (response && response.success && typeof response.hiddenCount === 'number') {
-            hiddenCount.textContent = response.hiddenCount;
+        const response = await sendMessage({ action: 'getTotalVideosBlocked' });
+        if (response && response.success && typeof response.count === 'number') {
+            hiddenCount.textContent = response.count;
         } else {
             hiddenCount.textContent = '0';
         }

@@ -194,6 +194,8 @@
 
         container.setAttribute('data-ytb-hidden', 'true');
         container.style.display = 'none';
+
+        chrome.runtime.sendMessage({ action: 'incrementVideosBlocked' }).catch(() => {});
     }
 
     function restoreIfUnblocked(container) {
@@ -455,6 +457,11 @@
         if (existing) {
             if (injectedContext?.channelName) existing.setAttribute('data-channel-name', injectedContext.channelName);
             if (injectedContext?.channelId) existing.setAttribute('data-channel-id', injectedContext.channelId);
+            const menuPopup = dropdown.querySelector('ytd-menu-popup-renderer');
+            if (menuPopup) {
+                menuPopup.style.maxWidth = '180px';
+                menuPopup.style.maxHeight = '220px';
+            }
             return;
         }
 
@@ -523,13 +530,14 @@
                 });
 
                 lb.appendChild(paperItem);
-                dropdown.removeAttribute('data-ytb-search-injecting');
 
                 const menuPopup = dropdown.querySelector('ytd-menu-popup-renderer');
                 if (menuPopup) {
                     menuPopup.style.maxWidth = '180px';
                     menuPopup.style.maxHeight = '220px';
                 }
+
+                dropdown.removeAttribute('data-ytb-search-injecting');
 
                 void paperItem.offsetWidth;
                 console.log('Block Channel button added successfully (search)');

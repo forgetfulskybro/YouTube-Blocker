@@ -1,8 +1,13 @@
 const BLOCKED_CHANNELS_KEY = 'blockedChannels';
+const TOTAL_VIDEOS_BLOCKED_KEY = 'totalVideosBlocked';
+
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.sync.get([BLOCKED_CHANNELS_KEY], (result) => {
+    chrome.storage.sync.get([BLOCKED_CHANNELS_KEY, TOTAL_VIDEOS_BLOCKED_KEY], (result) => {
         if (!result[BLOCKED_CHANNELS_KEY]) {
             chrome.storage.sync.set({ [BLOCKED_CHANNELS_KEY]: [] });
+        }
+        if (result[TOTAL_VIDEOS_BLOCKED_KEY] === undefined) {
+            chrome.storage.sync.set({ [TOTAL_VIDEOS_BLOCKED_KEY]: 0 });
         }
     });
 });
@@ -38,6 +43,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             .catch(error => sendResponse({ success: false, error: error.message }));
         return true;
     }
+    if (request.action === 'getTotalVideosBlocked') {
+        getTotalVideosBlocked()
+            .then(count => sendResponse({ success: true, count }))
+            .catch(error => sendResponse({ success: false, error: error.message }));
+        return true;
+    }
+    if (request.action === 'incrementVideosBlocked') {
+        incrementVideosBlocked()
+            .then(() => sendResponse({ success: true }))
+            .catch(error => sendResponse({ success: false, error: error.message }));
+        return true;
+    }
 });
 
 async function blockChannel(channelName, channelId) {
@@ -58,6 +75,7 @@ async function blockChannel(channelName, channelId) {
         };
         blockedChannels.push(newChannel);
         await chrome.storage.sync.set({ [BLOCKED_CHANNELS_KEY]: blockedChannels });
+
         console.log('Channel blocked:', newChannel);
         const tabs = await chrome.tabs.query({ url: '*://*.youtube.com/*' });
         tabs.forEach(tab => {
@@ -130,6 +148,27 @@ async function isChannelBlocked(channelId) {
         return blockedChannels.some(channel => channel.channelId === channelId);
     } catch (error) {
         console.error('Error checking if channel is blocked:', error);
+        throw error;
+    }
+}
+
+async function getTotalVideosBlocked() {
+    try {
+        const result = await chrome.storage.sync.get([TOTAL_VIDEOS_BLOCKED_KEY]);
+        return result[TOTAL_VIDEOS_BLOCKED_KEY] || 0;
+    } catch (error) {
+        console.error('Error getting total videos blocked:', error);
+        throw error;
+    }
+}
+
+async function incrementVideosBlocked() {
+    try {
+        const result = await chrome.storage.sync.get([TOTAL_VIDEOS_BLOCKED_KEY]);
+        const currentTotal = result[TOTAL_VIDEOS_BLOCKED_KEY] || 0;
+        await chrome.storage.sync.set({ [TOTAL_VIDEOS_BLOCKED_KEY]: currentTotal + 1 });
+    } catch (error) {
+        console.error('Error incrementing videos blocked:', error);
         throw error;
     }
 }
