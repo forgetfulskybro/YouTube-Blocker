@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "YouTube Blocker",
   "version": "1.0",
-  "description": "Block channels from showing up on your feed, even when seaching.",
+  "description": "Block channels from showing up on your feed, even when searching.",
   "permissions": [
     "storage",
     "tabs",
