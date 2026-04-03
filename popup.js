@@ -150,7 +150,7 @@ function displayChannels(channels) {
     const channelList = document.createElement('div');
     channelList.className = 'channel-list';
 
-    channels.forEach(channel => {
+    channels.sort((a, b) => new Date(b.blockedAt) - new Date(a.blockedAt)).forEach(channel => {
         const channelItem = createChannelItem(channel);
         channelList.appendChild(channelItem);
     });

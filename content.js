@@ -392,8 +392,6 @@
             return;
         }
 
-        console.log('Adding Block Channel button to legacy dropdown');
-
         const blockItem = document.createElement('yt-list-item-view-model');
         blockItem.setAttribute('role', 'menuitem');
         blockItem.setAttribute('data-blocker-button', 'true');
@@ -401,25 +399,27 @@
         if (injectedContext?.channelId) blockItem.setAttribute('data-channel-id', injectedContext.channelId);
 
         blockItem.innerHTML = `
-            <div class="yt-list-item-view-model__label yt-list-item-view-model__container yt-list-item-view-model__container--compact yt-list-item-view-model__container--tappable yt-list-item-view-model__container--in-popup">
-                <div aria-hidden="true" class="yt-list-item-view-model__image-container yt-list-item-view-model__leading">
-                    <span class="ytIconWrapperHost yt-list-item-view-model__accessory yt-list-item-view-model__image" role="img" aria-label="" aria-hidden="true" style="">
-                        <span class="yt-icon-shape ytSpecIconShapeHost">
-                            <div style="width: 100%; height: 100%; display: block; fill: currentcolor;">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none; display: inherit; width: 100%; height: 100%;">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4 11H8v-2h8v2z"></path>
-                                </svg>
-                            </div>
+            <div class="yt-list-item-view-model__layout-wrapper yt-list-item-view-model__container yt-list-item-view-model__container--compact yt-list-item-view-model__container--tappable yt-list-item-view-model__container--in-popup">
+                <div class="yt-list-item-view-model__main-container">
+                    <div aria-hidden="true" class="yt-list-item-view-model__image-container yt-list-item-view-model__leading">
+                        <span class="ytIconWrapperHost yt-list-item-view-model__accessory yt-list-item-view-model__image" role="img" aria-label="" aria-hidden="true" style="">
+                            <span class="yt-icon-shape ytSpecIconShapeHost">
+                                <div style="width: 100%; height: 100%; display: block; fill: currentcolor;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true" style="pointer-events: none; display: inherit; width: 100%; height: 100%;">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4 11H8v-2h8v2z"></path>
+                                    </svg>
+                                </div>
+                            </span>
                         </span>
-                    </span>
-                </div>
-                <button class="ytButtonOrAnchorHost ytButtonOrAnchorButton yt-list-item-view-model__button-or-anchor" style="">
-                    <div class="yt-list-item-view-model__text-wrapper">
-                        <div class="yt-list-item-view-model__title-wrapper">
-                            <span class="yt-core-attributed-string yt-list-item-view-model__title yt-core-attributed-string--white-space-pre-wrap" role="text">Block Channel</span>
-                        </div>
                     </div>
-                </button>
+                    <button class="ytButtonOrAnchorHost ytButtonOrAnchorButton yt-list-item-view-model__button-or-anchor" style="">
+                        <div class="yt-list-item-view-model__text-wrapper">
+                            <div class="yt-list-item-view-model__title-wrapper">
+                                <span class="yt-core-attributed-string yt-list-item-view-model__title yt-core-attributed-string--white-space-pre-wrap" role="text">Block Channel</span>
+                            </div>
+                        </div>
+                    </button>
+                </div>
             </div>
         `;
 
@@ -464,8 +464,6 @@
             }
             return;
         }
-
-        console.log('Adding Block Channel button to search dropdown');
 
         dropdown.setAttribute('data-ytb-search-injecting', 'true');
 
@@ -691,17 +689,61 @@
                 @keyframes ytbToastOut{from{transform:translate3d(0,0,0);opacity:1}to{transform:translate3d(0,-6px,0);opacity:0}}
                 .ytb-toast--in{animation:ytbToastIn .16s ease-out both;}
                 .ytb-toast--out{animation:ytbToastOut .14s ease-in both;}
+
+                /* Fix Block Channel button styling in 3-dot menu */
+                yt-list-item-view-model[data-blocker-button="true"] {
+                    background: transparent !important;
+                    border: none !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    min-height: 48px !important;
+                    height: auto !important;
+                }
+
+                yt-list-item-view-model[data-blocker-button="true"]:hover {
+                    background: rgba(255,255,255,0.1) !important;
+                }
+
+                yt-list-item-view-model[data-blocker-button="true"] .yt-list-item-view-model__container {
+                    padding: 8px 12px !important;
+                    min-height: 48px !important;
+                    align-items: center !important;
+                }
+
+                yt-list-item-view-model[data-blocker-button="true"] .yt-list-item-view-model__button-or-anchor {
+                    background: transparent !important;
+                    border: none !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                    color: #f1f1f1 !important;
+                    font-size: 14px !important;
+                    font-weight: 400 !important;
+                    text-align: left !important;
+                    width: 100% !important;
+                    height: auto !important;
+                    min-height: 32px !important;
+                }
+
+                yt-list-item-view-model[data-blocker-button="true"]:hover .yt-list-item-view-model__button-or-anchor {
+                    background: transparent !important;
+                }
+
+                yt-list-item-view-model[data-blocker-button="true"] .yt-list-item-view-model__title {
+                    color: #f1f1f1 !important;
+                    font-size: 14px !important;
+                    font-weight: 400 !important;
+                    line-height: 20px !important;
+                }
+
+                yt-list-item-view-model[data-blocker-button="true"] .yt-list-item-view-model__image {
+                    width: 24px !important;
+                    height: 24px !important;
+                    color: #f1f1f1 !important;
+                }
             `;
             (document.head || document.documentElement).appendChild(style);
         }
-
-        let root = document.getElementById('ytb-toast-root');
-        if (!root) {
-            root = document.createElement('div');
-            root.id = 'ytb-toast-root';
-            document.documentElement.appendChild(root);
-        }
-        return root;
+        return document.getElementById('ytb-toast-root') || (document.head || document.documentElement);
     }
 
     function dismissToast(toast) {
@@ -766,10 +808,10 @@
 
     function scanForDropdowns() {
         const dropdowns = document.querySelectorAll('tp-yt-iron-dropdown');
-        console.log(`Found ${dropdowns.length} dropdowns`);
+        //console.log(`Found ${dropdowns.length} dropdowns`);
         
         dropdowns.forEach((dropdown, index) => {
-            console.log(`Processing dropdown ${index}`);
+            //console.log(`Processing dropdown ${index}`);
             addBlockChannelButton(dropdown);
         });
     }
