@@ -1,3 +1,5 @@
+# Discontinued as there's a better extension: [YTBlock](https://chromewebstore.google.com/detail/ytblock-block-any-content/nedcanggplmbbgmlpcjiafgjcpdimpea?hl=en)
+
 # YouTube Blocker
 - Simple Chrome extension that allows you to block channels on YouTube. Blocked channels will never show videos on your recommendation feed or when you're searching YouTube. 
 
